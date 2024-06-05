@@ -11,6 +11,8 @@ canvas.style.width = 1280;
 canvas.style.width = 720;
 
 let gameStarted = false;
+let gamePaused = false;
+let toggleText = true;
 
 const player = new Player(ctx, "player-spritesheet.png", 10);
 
@@ -26,6 +28,18 @@ const floor = new Rect(
   canvas.height
 );
 
+function drawText() {
+  ctx.font = "48px fontRetroGaming";
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(
+    'Press "Space" to start',
+    canvas.width / 2,
+    canvas.height / 2 - 100
+  );
+}
+
 function update(delta) {
   // update game state here
 
@@ -36,6 +50,10 @@ function draw() {
   floor.draw(ctx);
 
   player.draw(ctx);
+
+  if (toggleText) {
+    drawText();
+  }
 }
 
 const gameLoop = new GameLoop(update, draw, ctx, canvas.width, canvas.height);
@@ -46,6 +64,7 @@ addEventListener("keypress", (e) => {
   if (e.code === "Space" && !gameStarted) {
     // start game
     gameStarted = true;
+    toggleText = false;
     player.playAnimation("run");
   }
 });

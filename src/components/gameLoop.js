@@ -28,6 +28,7 @@ export class GameLoop {
   };
 
   start() {
+    console.log("hehe");
     if (!this.isRunning) {
       this.isRunning = true;
       this.requestAnimFrameId = requestAnimationFrame(this.main);

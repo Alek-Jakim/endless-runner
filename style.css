@@ -18,3 +18,8 @@ body {
   transform: translate(-50%, -50%);
   border: 1px solid black;
 }
+
+@font-face {
+  font-family: fontRetroGaming;
+  src: url("game-font.ttf");
+}
