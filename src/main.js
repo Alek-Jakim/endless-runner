@@ -10,6 +10,8 @@ document.body.style.backgroundColor = "#3b3541";
 canvas.style.width = 1280;
 canvas.style.width = 720;
 
+let gameStarted = false;
+
 const player = new Player(ctx, "player-spritesheet.png", 10);
 
 const floor = new Rect(
@@ -31,13 +33,19 @@ function update(delta) {
 }
 
 function draw() {
-  // rect
   floor.draw(ctx);
 
-  // draw player - find out why image is squished
   player.draw(ctx);
 }
 
 const gameLoop = new GameLoop(update, draw, ctx, canvas.width, canvas.height);
 
 gameLoop.start();
+
+addEventListener("keypress", (e) => {
+  if (e.code === "Space" && !gameStarted) {
+    // start game
+    gameStarted = true;
+    player.playAnimation("run");
+  }
+});

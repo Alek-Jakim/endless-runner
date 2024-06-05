@@ -3,18 +3,31 @@ export class Player {
     this.canvasWidth = ctx.canvas.width;
     this.canvasHeight = ctx.canvas.height;
 
+    this.animations = {
+      idle: {
+        startFrameX: 0,
+        endFrameX: 10,
+      },
+      run: {
+        startFrameX: 10,
+        endFrameX: 18,
+      },
+    };
+    this.currentAnimation = "idle";
+
     this.image = new Image();
     this.image.src = imagePath;
     this.isLoaded = false;
 
+    this.currentFrameX = this.animations[this.currentAnimation].startFrameX;
     this.frameTimer = 0;
     this.staggerRate = 2.5;
     this.frameWidth = 192;
     this.frameHeight = 192;
-    this.x = 0;
-    this.y = this.canvasHeight - this.frameHeight - 46;
+    this.x = 100;
+    this.y = this.canvasHeight - this.frameHeight - 46; // 46 is just to place it directly on ground
 
-    this.numOfFrames = 10;
+    this.endFrameX = 10;
     this.frameX = 0;
 
     this.image.onload = () => {
@@ -37,7 +50,7 @@ export class Player {
 
     ctx.drawImage(
       this.image,
-      this.frameX * this.frameWidth,
+      this.currentFrameX * this.frameWidth,
       0,
       this.frameWidth,
       this.frameHeight,
@@ -50,14 +63,23 @@ export class Player {
 
   update(delta) {
     if (this.frameTimer > delta * this.staggerRate) {
-      if (this.frameX >= this.numOfFrames - 1) {
-        this.frameX = 0;
+      if (
+        this.currentFrameX >=
+        this.animations[this.currentAnimation].endFrameX - 1
+      ) {
+        this.currentFrameX = this.animations[this.currentAnimation].startFrameX;
       } else {
-        this.frameX++;
+        this.currentFrameX++;
         this.frameTimer = 0;
       }
     } else {
       this.frameTimer += delta;
     }
+  }
+
+  playAnimation(animation) {
+    this.currentAnimation = animation;
+    this.currentFrameX = this.animations[this.currentAnimation].startFrameX;
+    this.frameTimer = 0;
   }
 }
