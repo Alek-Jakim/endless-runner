@@ -2,6 +2,7 @@ export class Player {
   constructor(ctx, imagePath, scaleFactor = 1) {
     this.canvasWidth = ctx.canvas.width;
     this.canvasHeight = ctx.canvas.height;
+    this.isGameRunning = false;
 
     this.animations = {
       idle: {
@@ -68,7 +69,11 @@ export class Player {
     );
   }
 
-  update(delta) {
+  update(delta, gameRunning) {
+    if (gameRunning && !this.isGameRunning) {
+      this.isGameRunning = true;
+    }
+
     //Animation
     if (this.frameTimer > delta * this.staggerRate) {
       if (
@@ -94,6 +99,16 @@ export class Player {
     if (this.y > this.canvasHeight - this.height - 46) {
       this.y = this.canvasHeight - this.height - 46;
     }
+
+    if (this.isOnFloor() && this.isGameRunning) {
+      this.playAnimation("run");
+    } else {
+      this.playAnimation("idle");
+    }
+
+    if (!this.isOnFloor()) {
+      this.playAnimation("jump");
+    }
   }
 
   isOnFloor() {
@@ -105,6 +120,8 @@ export class Player {
   }
 
   playAnimation(animation) {
+    if (this.currentAnimation === animation) return;
+
     this.currentAnimation = animation;
     this.currentFrameX = this.animations[this.currentAnimation].startFrameX;
     this.frameTimer = 0;

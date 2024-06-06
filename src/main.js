@@ -15,7 +15,7 @@ canvas.style.width = 720;
 let gameStarted = false;
 let toggleText = true;
 
-const player = new Player(ctx, "player-spritesheet.png", 10);
+const player = new Player(ctx, "player-spritesheet.png", 10, gameStarted);
 const input = new Input();
 let currentTime = 0;
 
@@ -68,7 +68,7 @@ function drawText() {
 }
 
 function update(delta) {
-  player.update(delta);
+  player.update(delta, gameStarted);
 
   for (let obs of obstacles) {
     obs.update(delta);
@@ -78,25 +78,9 @@ function update(delta) {
     }
   }
 
-  if (obstacles.length) {
-    console.log(obstacles[0].y);
-  }
-
   // Player animations
   if (input.pressedKey === "Space" && gameStarted && player.isOnFloor()) {
     player.jump();
-  }
-
-  if (!player.isOnFloor() && player.currentAnimation !== "jump") {
-    player.playAnimation("jump");
-  }
-
-  if (player.isOnFloor() && player.currentAnimation !== "run" && gameStarted) {
-    player.playAnimation("run");
-  }
-
-  if (!gameStarted && player.currentAnimation !== "idle") {
-    player.playAnimation("idle");
   }
 
   // Time in seconds
