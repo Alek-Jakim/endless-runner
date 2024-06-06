@@ -12,6 +12,10 @@ export class Player {
         startFrameX: 10,
         endFrameX: 18,
       },
+      jump: {
+        startFrameX: 18,
+        endFrameX: 19,
+      },
     };
     this.currentAnimation = "idle";
 
@@ -22,11 +26,14 @@ export class Player {
     this.currentFrameX = this.animations[this.currentAnimation].startFrameX;
     this.frameTimer = 0;
     this.staggerRate = 2.5;
-    this.frameWidth = 192;
-    this.frameHeight = 192;
+    this.width = 192;
+    this.height = 192;
     this.x = 100;
-    this.y = this.canvasHeight - this.frameHeight - 46; // 46 is just to place it directly on ground
 
+    this.speed = 30;
+    this.gravity = 1;
+    this.velocityY = 0;
+    this.y = this.canvasHeight - this.height - 70;
     this.endFrameX = 10;
     this.frameX = 0;
 
@@ -50,18 +57,19 @@ export class Player {
 
     ctx.drawImage(
       this.image,
-      this.currentFrameX * this.frameWidth,
+      this.currentFrameX * this.width,
       0,
-      this.frameWidth,
-      this.frameHeight,
+      this.width,
+      this.height,
       this.x,
       this.y,
-      this.frameWidth,
-      this.frameHeight
+      this.width,
+      this.height
     );
   }
 
   update(delta) {
+    //Animation
     if (this.frameTimer > delta * this.staggerRate) {
       if (
         this.currentFrameX >=
@@ -70,11 +78,30 @@ export class Player {
         this.currentFrameX = this.animations[this.currentAnimation].startFrameX;
       } else {
         this.currentFrameX++;
-        this.frameTimer = 0;
       }
+      this.frameTimer = 0;
     } else {
       this.frameTimer += delta;
     }
+
+    // Jump logic
+    this.y += this.velocityY;
+    if (!this.isOnFloor()) {
+      this.velocityY += this.gravity;
+    } else {
+      this.velocityY = 0;
+    }
+    if (this.y > this.canvasHeight - this.height - 50) {
+      this.y = this.canvasHeight - this.height - 50;
+    }
+  }
+
+  isOnFloor() {
+    return this.y >= this.canvasHeight - this.height - 50;
+  }
+
+  jump() {
+    this.velocityY -= 20;
   }
 
   playAnimation(animation) {
