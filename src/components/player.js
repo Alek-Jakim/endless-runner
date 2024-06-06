@@ -29,11 +29,11 @@ export class Player {
     this.width = 192;
     this.height = 192;
     this.x = 100;
+    this.y = this.canvasHeight - this.height - 70;
 
     this.speed = 30;
     this.gravity = 1;
     this.velocityY = 0;
-    this.y = this.canvasHeight - this.height - 70;
     this.endFrameX = 10;
     this.frameX = 0;
 
@@ -91,13 +91,13 @@ export class Player {
     } else {
       this.velocityY = 0;
     }
-    if (this.y > this.canvasHeight - this.height - 50) {
-      this.y = this.canvasHeight - this.height - 50;
+    if (this.y > this.canvasHeight - this.height - 46) {
+      this.y = this.canvasHeight - this.height - 46;
     }
   }
 
   isOnFloor() {
-    return this.y >= this.canvasHeight - this.height - 50;
+    return this.y >= this.canvasHeight - this.height - 46;
   }
 
   jump() {

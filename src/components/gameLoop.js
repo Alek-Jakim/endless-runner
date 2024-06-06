@@ -10,10 +10,22 @@ export class GameLoop {
     this.ctx = ctx;
     this.cWidth = cWidth;
     this.cHeight = cHeight;
+
+    this._timestamp = 0;
+  }
+
+  get timestamp() {
+    return this._timestamp;
+  }
+
+  set setTimestamp(ts) {
+    this._timestamp = ts;
   }
 
   main = (timestamp) => {
     if (!this.isRunning) return;
+
+    this.setTimestamp = timestamp;
 
     const delta = (timestamp - this.lastFrameTime) / 1000;
     this.lastFrameTime = timestamp;

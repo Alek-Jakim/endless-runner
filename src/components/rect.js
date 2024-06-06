@@ -1,3 +1,5 @@
+import { getRandomInt } from "../utils";
+
 export class Rect {
   constructor(
     x = 0,
@@ -10,7 +12,8 @@ export class Rect {
     strokeWidth = 0,
     strokeHeight = 0,
     strokeStyle = "white",
-    lineWidth = 5
+    lineWidth = 5,
+    isObstacle = false
   ) {
     this.x = x;
     this.y = y;
@@ -24,6 +27,7 @@ export class Rect {
     this.strokeHeight = strokeHeight;
     this.strokeStyle = strokeStyle;
     this.lineWidth = lineWidth;
+    this.isObstacle = isObstacle;
   }
 
   draw(ctx) {
@@ -38,5 +42,14 @@ export class Rect {
       this.strokeWidth,
       this.strokeHeight
     );
+  }
+
+  update(delta) {
+    if (!this.isObstacle) return;
+
+    let randomSpeed = getRandomInt(500, 800);
+
+    this.x -= randomSpeed * delta;
+    this.strokeX -= randomSpeed * delta;
   }
 }
