@@ -53,6 +53,10 @@ export class Player {
     };
   }
 
+  set setIsGameRunning(value) {
+    this.isGameRunning = value;
+  }
+
   draw(ctx) {
     if (!this.isLoaded) return;
 

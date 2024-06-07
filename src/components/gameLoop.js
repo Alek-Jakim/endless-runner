@@ -14,7 +14,7 @@ export class GameLoop {
     this._timestamp = 0;
   }
 
-  get timestamp() {
+  get getTimestamp() {
     return this._timestamp;
   }
 
@@ -40,7 +40,6 @@ export class GameLoop {
   };
 
   start() {
-    console.log("hehe");
     if (!this.isRunning) {
       this.isRunning = true;
       this.requestAnimFrameId = requestAnimationFrame(this.main);
@@ -52,6 +51,12 @@ export class GameLoop {
       cancelAnimationFrame(this.requestAnimFrameId);
     }
     this.isRunning = false;
+  }
+
+  reset(gameStateReset) {
+    this.stop();
+    gameStateReset();
+    this.start();
   }
 
   clearCanvas(ctx, cWidth, cHeight) {

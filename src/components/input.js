@@ -3,7 +3,6 @@ export class Input {
     this.pressedKeys = [];
 
     addEventListener("keypress", (e) => {
-      console.log(e.code);
       if (e.code === "Space" && this.pressedKeys.indexOf(e.code) === -1) {
         this.pressedKeys.unshift(e.code);
       }
