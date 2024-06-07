@@ -1,8 +1,13 @@
+import { Sound } from "./sound";
+
 export class Player {
   constructor(ctx, imagePath, scaleFactor = 1) {
     this.canvasWidth = ctx.canvas.width;
     this.canvasHeight = ctx.canvas.height;
     this.isGameRunning = false;
+
+    this.jumpSound = new Sound("jump-grunt.mp3");
+    this.gameOverSound = new Sound("game-over-grunt.mp3");
 
     this.animations = {
       idle: {

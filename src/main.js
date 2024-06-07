@@ -3,6 +3,7 @@ import { Player } from "./components/player";
 import { Rect } from "./components/rect";
 import { Input } from "./components/input";
 import { getRandomInt, isCollidingRect } from "./utils";
+import { Sound } from "./components/sound";
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
@@ -101,6 +102,7 @@ function update(delta) {
     }
 
     if (isCollidingRect(player, obs)) {
+      player.gameOverSound.play();
       gameLoop.stop();
       gameOver = true;
       drawText('Game Over! Press "Space" to Restart', 48, "red");
@@ -111,6 +113,7 @@ function update(delta) {
   // Player animations
   if (input.pressedKey === "Space" && gameStarted && player.isOnFloor()) {
     player.jump();
+    player.jumpSound.play();
   }
 }
 
