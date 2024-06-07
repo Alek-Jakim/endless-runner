@@ -17,31 +17,10 @@ let toggleText = true;
 
 const player = new Player(ctx, "player-spritesheet.png", 10, gameStarted);
 const input = new Input();
-let currentTime = 0;
 
 let obstacles = [];
-
-function createObstacle() {
-  const colors = ["green", "blue", "red", "pink"];
-
-  const randomHeight = getRandomInt(75, 100);
-  const randomColor = colors[getRandomInt(0, colors.length - 1)];
-
-  return new Rect(
-    canvas.width + 300,
-    canvas.height - 178,
-    50,
-    randomHeight,
-    randomColor,
-    canvas.width + 300,
-    canvas.height - 178,
-    50,
-    randomHeight,
-    "white",
-    2,
-    true
-  );
-}
+let obstacleTimer = 0;
+let obstacleInterval = getRandomInt(1500, 3000);
 
 const floor = new Rect(
   -100,
@@ -70,6 +49,22 @@ function drawText() {
 function update(delta) {
   player.update(delta, gameStarted);
 
+  // Spawn obstacles
+  if (gameStarted) {
+    if (obstacleTimer >= obstacleInterval) {
+      obstacles.push(Rect.createRectObstacle(canvas));
+      obstacleTimer = 0;
+      obstacleInterval = getRandomInt(
+        getRandomInt(500, 1500),
+        getRandomInt(2000, 3000)
+      );
+    } else {
+      obstacleTimer += Math.round(delta * 1000);
+    }
+  }
+
+  console.log(obstacleInterval);
+
   for (let obs of obstacles) {
     obs.update(delta);
 
@@ -82,9 +77,6 @@ function update(delta) {
   if (input.pressedKey === "Space" && gameStarted && player.isOnFloor()) {
     player.jump();
   }
-
-  // Time in seconds
-  currentTime = Math.floor(gameLoop._timestamp / 1000);
 }
 
 function draw() {
@@ -92,11 +84,7 @@ function draw() {
 
   player.draw(ctx);
 
-  if (gameStarted) {
-    if (currentTime % 3 === 0 && obstacles.length < 1) {
-      const obs = createObstacle();
-      obstacles.push(obs);
-    }
+  if (gameStarted && obstacles.length > 0) {
     for (let obs of obstacles) {
       obs.draw(ctx);
     }

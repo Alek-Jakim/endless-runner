@@ -52,4 +52,26 @@ export class Rect {
     this.x -= randomSpeed * delta;
     this.strokeX -= randomSpeed * delta;
   }
+
+  static createRectObstacle(canvas) {
+    const colors = ["green", "blue", "red", "pink"];
+
+    const randomHeight = getRandomInt(75, 100);
+    const randomColor = colors[getRandomInt(0, colors.length - 1)];
+
+    return new Rect(
+      canvas.width + 300,
+      canvas.height - 178,
+      50,
+      randomHeight,
+      randomColor,
+      canvas.width + 300,
+      canvas.height - 178,
+      50,
+      randomHeight,
+      "white",
+      2,
+      true
+    );
+  }
 }
