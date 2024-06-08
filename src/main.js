@@ -4,14 +4,15 @@ import { Rect } from "./components/rect";
 import { Input } from "./components/input";
 import { getRandomInt, isCollidingRect } from "./utils";
 import { Sound } from "./components/sound";
+import { C_WIDTH, C_HEIGHT } from "./constants";
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
 document.body.style.backgroundColor = "#3b3541";
 
-canvas.style.width = 1280;
-canvas.style.width = 720;
+canvas.style.width = C_WIDTH;
+canvas.style.width = C_HEIGHT;
 
 let gameStarted = false;
 let gameOver = false;
@@ -20,7 +21,7 @@ let score = 0;
 let scoreTimer = 0;
 let scoreInterval = 500;
 
-const player = new Player(ctx, "player-spritesheet.png", 10, gameStarted);
+const player = new Player("player-spritesheet.png");
 const input = new Input();
 
 function resetGameState() {
@@ -44,21 +45,21 @@ let obstacleInterval = getRandomInt(1500, 3000);
 
 const floor = new Rect(
   -100,
-  canvas.height - 75,
-  canvas.width + 100,
+  C_HEIGHT - 75,
+  C_WIDTH + 100,
   75,
   "#5380a3",
   -100,
-  canvas.height - 75,
-  canvas.width + 200,
-  canvas.height
+  C_HEIGHT - 75,
+  C_WIDTH + 200,
+  C_HEIGHT
 );
 
 function drawText(
   text,
   size = 48,
   color = "white",
-  pos = [canvas.width / 2, canvas.height / 2 - 100]
+  pos = [C_WIDTH / 2, C_HEIGHT / 2 - 100]
 ) {
   ctx.font = `${size}px fontRetroGaming`;
   ctx.fillStyle = color;
@@ -82,7 +83,8 @@ function update(delta) {
 
   // Spawn obstacles
   if (gameStarted) {
-    if (obstacleTimer >= obstacleInterval && obstacles.length < 1) {
+    // TODO - remove obstacles.length < 1
+    if (obstacleTimer >= obstacleInterval) {
       obstacles.push(Rect.createRectObstacle(canvas));
       obstacleTimer = 0;
       obstacleInterval = getRandomInt(
@@ -102,7 +104,8 @@ function update(delta) {
     }
 
     if (isCollidingRect(player, obs)) {
-      player.gameOverSound.play();
+      //TODO - enable sounds again
+      // player.gameOverSound.play();
       gameLoop.stop();
       gameOver = true;
       drawText('Game Over! Press "Space" to Restart', 48, "red");
@@ -113,7 +116,7 @@ function update(delta) {
   // Player animations
   if (input.pressedKey === "Space" && gameStarted && player.isOnFloor()) {
     player.jump();
-    player.jumpSound.play();
+    // player.jumpSound.play();
   }
 }
 
@@ -132,10 +135,10 @@ function draw() {
     drawText('Press "Enter" to Start');
   }
 
-  drawText(`Score: ${score}`, 38, "white", [canvas.width - 150, 75]);
+  drawText(`Score: ${score}`, 38, "white", [C_WIDTH - 150, 75]);
 }
 
-const gameLoop = new GameLoop(update, draw, ctx, canvas.width, canvas.height);
+const gameLoop = new GameLoop(update, draw, ctx, C_WIDTH, C_HEIGHT);
 
 gameLoop.start();
 

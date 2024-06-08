@@ -1,9 +1,7 @@
 import { Sound } from "./sound";
-
+import { C_HEIGHT } from "../constants";
 export class Player {
-  constructor(ctx, imagePath, scaleFactor = 1) {
-    this.canvasWidth = ctx.canvas.width;
-    this.canvasHeight = ctx.canvas.height;
+  constructor(imagePath, x = 100, y) {
     this.isGameRunning = false;
 
     this.jumpSound = new Sound("jump-grunt.mp3");
@@ -34,8 +32,8 @@ export class Player {
     this.staggerRate = 2.5;
     this.width = 192;
     this.height = 192;
-    this.x = 100;
-    this.y = this.canvasHeight - this.height - 70;
+    this.x = x;
+    this.y = y ?? C_HEIGHT - this.height - 70;
 
     this.speed = 30;
     this.gravity = 1;
@@ -44,16 +42,6 @@ export class Player {
     this.frameX = 0;
 
     this.image.onload = () => {
-      ctx.imageSmoothingEnabled = false;
-
-      ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-
-      ctx.save();
-      ctx.scale(scaleFactor, scaleFactor);
-
-      this.draw(ctx);
-
-      ctx.restore();
       this.isLoaded = true;
     };
   }
@@ -105,8 +93,8 @@ export class Player {
     } else {
       this.velocityY = 0;
     }
-    if (this.y > this.canvasHeight - this.height - 46) {
-      this.y = this.canvasHeight - this.height - 46;
+    if (this.y > C_HEIGHT - this.height - 46) {
+      this.y = C_HEIGHT - this.height - 46;
     }
 
     if (this.isOnFloor() && this.isGameRunning) {
@@ -121,7 +109,7 @@ export class Player {
   }
 
   isOnFloor() {
-    return this.y >= this.canvasHeight - this.height - 46;
+    return this.y >= C_HEIGHT - this.height - 46;
   }
 
   jump() {

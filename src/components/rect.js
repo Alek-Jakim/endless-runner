@@ -1,3 +1,4 @@
+import { C_HEIGHT } from "../constants";
 import { getRandomInt } from "../utils";
 
 export class Rect {
@@ -28,6 +29,9 @@ export class Rect {
     this.strokeStyle = strokeStyle;
     this.lineWidth = lineWidth;
     this.isObstacle = isObstacle;
+
+    this.gravity = 1;
+    this.velocityY = 0;
   }
 
   draw(ctx) {
@@ -51,6 +55,22 @@ export class Rect {
 
     this.x -= randomSpeed * delta;
     this.strokeX -= randomSpeed * delta;
+
+    // Jump logic
+    this.y += this.velocityY;
+    this.strokeY += this.velocityY;
+    if (!this.isOnFloor()) {
+      this.velocityY += this.gravity;
+    } else {
+      this.velocityY = 0;
+    }
+    if (this.y > C_HEIGHT - this.height - 46) {
+      this.y = C_HEIGHT - this.height - 46;
+    }
+  }
+
+  isOnFloor() {
+    return this.y >= C_HEIGHT - this.height - 80;
   }
 
   static createRectObstacle(canvas) {
