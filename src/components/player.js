@@ -6,6 +6,7 @@ export class Player {
 
     this.jumpSound = new Sound("jump-grunt.mp3");
     this.gameOverSound = new Sound("game-over-grunt.mp3");
+    this.runningSound = new Sound("running.mp3", true);
 
     this.animations = {
       idle: {
@@ -99,8 +100,10 @@ export class Player {
 
     if (this.isOnFloor() && this.isGameRunning) {
       this.playAnimation("run");
+      this.runningSound.play();
     } else {
       this.playAnimation("idle");
+      this.runningSound.stop();
     }
 
     if (!this.isOnFloor()) {

@@ -83,7 +83,6 @@ function update(delta) {
 
   // Spawn obstacles
   if (gameStarted) {
-    // TODO - remove obstacles.length < 1
     if (obstacleTimer >= obstacleInterval) {
       obstacles.push(Rect.createRectObstacle(canvas));
       obstacleTimer = 0;
@@ -104,9 +103,9 @@ function update(delta) {
     }
 
     if (isCollidingRect(player, obs)) {
-      //TODO - enable sounds again
-      // player.gameOverSound.play();
+      player.gameOverSound.play();
       gameLoop.stop();
+      player.runningSound.stop();
       gameOver = true;
       drawText('Game Over! Press "Space" to Restart', 48, "red");
       player.setIsGameRunning = false;
@@ -116,7 +115,7 @@ function update(delta) {
   // Player animations
   if (input.pressedKey === "Space" && gameStarted && player.isOnFloor()) {
     player.jump();
-    // player.jumpSound.play();
+    player.jumpSound.play();
   }
 }
 

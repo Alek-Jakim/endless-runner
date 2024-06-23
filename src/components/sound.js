@@ -8,4 +8,9 @@ export class Sound {
   play() {
     this.audio.play();
   }
+
+  stop() {
+    this.audio.pause();
+    this.audio.currentTime = 0;
+  }
 }
