@@ -62,6 +62,7 @@ export class Rect {
   update(delta) {
     if (!this.isObstacle) return;
 
+    // TODO - increase speed as time passes
     let randomSpeed = getRandomInt(1500, 1800);
 
     this.x -= randomSpeed * delta;
