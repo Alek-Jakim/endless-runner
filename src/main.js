@@ -28,8 +28,9 @@ function resetGameState() {
   gameStarted = false;
   gameOver = false;
   toggleText = true;
-  score.default();
 
+  // reset
+  score.default();
   obstacles.default();
 
   player.playAnimation("idle");
@@ -65,25 +66,28 @@ function update(delta) {
 
   // Update score
   if (gameStarted && !gameOver) {
+    // Increase score
     if (score.timer > score.interval) {
       score.current += 1;
       score.timer = 0;
     } else {
       score.timer += delta * 1000;
     }
-  }
 
-  // Spawn obstacles
-  if (gameStarted) {
+    // Spawn obstacles
     if (obstacles.timer >= obstacles.interval) {
       obstacles.group.push(Rect.createRectObstacle(canvas));
       obstacles.timer = 0;
-      obstacles.interval = getRandomInt(
-        getRandomInt(500, 1200),
-        getRandomInt(1500, 2000)
-      );
+      obstacles.interval = getRandomInt(obstacles.intOne, obstacles.intTwo);
     } else {
       obstacles.timer += Math.round(delta * 1000);
+    }
+
+    if (obstacles.spawnTimer >= obstacles.spawnInterval) {
+      obstacles.spawnTimer = 0;
+      obstacles.reduceIntervals();
+    } else {
+      obstacles.spawnTimer += Math.round(delta * 1000);
     }
   }
 
