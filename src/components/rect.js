@@ -2,12 +2,23 @@ import { C_HEIGHT } from "../constants";
 import { getRandomInt } from "../utils";
 
 export class Rect {
+  static colors = [
+    "green",
+    "blue",
+    "red",
+    "pink",
+    "purple",
+    "grey",
+    "orange",
+    "cyan",
+  ];
+
   constructor(
     x = 0,
     y = 0,
     width = 50,
     height = 100,
-    color = "white",
+    color,
     strokeX = 0,
     strokeY = 0,
     strokeWidth = 0,
@@ -51,7 +62,7 @@ export class Rect {
   update(delta) {
     if (!this.isObstacle) return;
 
-    let randomSpeed = getRandomInt(500, 800);
+    let randomSpeed = getRandomInt(1500, 1800);
 
     this.x -= randomSpeed * delta;
     this.strokeX -= randomSpeed * delta;
@@ -74,10 +85,8 @@ export class Rect {
   }
 
   static createRectObstacle(canvas) {
-    const colors = ["green", "blue", "red", "pink"];
-
     const randomHeight = getRandomInt(75, 100);
-    const randomColor = colors[getRandomInt(0, colors.length - 1)];
+    const randomColor = Rect.colors[getRandomInt(0, Rect.colors.length - 1)];
 
     return new Rect(
       canvas.width + 300,
@@ -89,7 +98,7 @@ export class Rect {
       canvas.height - 178,
       50,
       randomHeight,
-      "white",
+      Rect.colors["white"],
       2,
       true
     );

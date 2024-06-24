@@ -2,8 +2,9 @@ import { GameLoop } from "./components/gameLoop";
 import { Player } from "./components/player";
 import { Rect } from "./components/rect";
 import { Input } from "./components/input";
+import { Score } from "./components/score";
+import { Obastacles } from "./components/obstacles";
 import { getRandomInt, isCollidingRect } from "./utils";
-import { Sound } from "./components/sound";
 import { C_WIDTH, C_HEIGHT } from "./constants";
 
 const canvas = document.getElementById("game");
@@ -17,31 +18,22 @@ canvas.style.width = C_HEIGHT;
 let gameStarted = false;
 let gameOver = false;
 let toggleText = true;
-let score = 0;
-let scoreTimer = 0;
-let scoreInterval = 500;
 
 const player = new Player("player-spritesheet.png");
 const input = new Input();
+const score = new Score();
+const obstacles = new Obastacles();
 
 function resetGameState() {
   gameStarted = false;
   gameOver = false;
   toggleText = true;
-  score = 0;
-  scoreTimer = 0;
-  scoreInterval = 500;
+  score.default();
 
-  obstacles = [];
-  obstacleTimer = 0;
-  obstacleInterval = getRandomInt(1500, 3000);
+  obstacles.default();
 
   player.playAnimation("idle");
 }
-
-let obstacles = [];
-let obstacleTimer = 0;
-let obstacleInterval = getRandomInt(1500, 3000);
 
 const floor = new Rect(
   -100,
@@ -73,33 +65,33 @@ function update(delta) {
 
   // Update score
   if (gameStarted && !gameOver) {
-    if (scoreTimer > scoreInterval) {
-      score += 1;
-      scoreTimer = 0;
+    if (score.timer > score.interval) {
+      score.current += 1;
+      score.timer = 0;
     } else {
-      scoreTimer += delta * 1000;
+      score.timer += delta * 1000;
     }
   }
 
   // Spawn obstacles
   if (gameStarted) {
-    if (obstacleTimer >= obstacleInterval) {
-      obstacles.push(Rect.createRectObstacle(canvas));
-      obstacleTimer = 0;
-      obstacleInterval = getRandomInt(
+    if (obstacles.timer >= obstacles.interval) {
+      obstacles.group.push(Rect.createRectObstacle(canvas));
+      obstacles.timer = 0;
+      obstacles.interval = getRandomInt(
         getRandomInt(500, 1200),
         getRandomInt(1500, 2000)
       );
     } else {
-      obstacleTimer += Math.round(delta * 1000);
+      obstacles.timer += Math.round(delta * 1000);
     }
   }
 
-  for (let obs of obstacles) {
+  for (let obs of obstacles.group) {
     obs.update(delta);
 
     if (obs.x < -100) {
-      obstacles.splice(obstacles.indexOf(obs), 1);
+      obstacles.group.splice(obstacles.group.indexOf(obs), 1);
     }
 
     if (isCollidingRect(player, obs)) {
@@ -125,7 +117,7 @@ function draw() {
   player.draw(ctx);
 
   if (gameStarted) {
-    for (let obs of obstacles) {
+    for (let obs of obstacles.group) {
       obs.draw(ctx);
     }
   }
@@ -134,7 +126,7 @@ function draw() {
     drawText('Press "Enter" to Start');
   }
 
-  drawText(`Score: ${score}`, 38, "white", [C_WIDTH - 150, 75]);
+  drawText(`Score: ${score.current}`, 38, "white", [C_WIDTH - 150, 75]);
 }
 
 const gameLoop = new GameLoop(update, draw, ctx, C_WIDTH, C_HEIGHT);
