@@ -49,7 +49,8 @@ export class Player {
 
     this.slideClock = new Clock();
     this.slideClock.timer = 0;
-    this.slideClock.interval = 1500;
+    this.slideClock.interval = 1000;
+    this.isSliding = false;
 
     this.image.onload = () => {
       this.isLoaded = true;

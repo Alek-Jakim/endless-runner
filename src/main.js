@@ -24,7 +24,6 @@ const player = new Player("player-spritesheet.png");
 const input = new Input();
 const score = new Score();
 const obstacles = new Obastacles();
-const bat = new Bat(100, 425, "bat.png");
 
 function resetGameState() {
   gameStarted = false;
@@ -66,8 +65,6 @@ function drawText(
 function update(delta) {
   player.update(delta, gameStarted);
 
-  bat.update(delta, gameStarted);
-
   // Update score
   if (gameStarted && !gameOver) {
     // Increase score
@@ -87,6 +84,7 @@ function update(delta) {
       } else {
         obstacles.group.push(new Bat(C_WIDTH + 100, 425, "bat.png"));
       }
+
       obstacles.spawnClock.timer = 0;
       obstacles.spawnClock.interval = getRandomInt(
         obstacles.intOne,
@@ -111,6 +109,15 @@ function update(delta) {
     } else {
       Rect.speedClock.timer += Math.round(delta * 1000);
     }
+
+    if (player.isSliding) {
+      if (player.slideClock.timer >= player.slideClock.interval) {
+        player.slideClock.timer = 0;
+        player.isSliding = false;
+      } else {
+        player.slideClock.timer += Math.round(delta * 1000);
+      }
+    }
   }
 
   for (let obs of obstacles.group) {
@@ -127,24 +134,28 @@ function update(delta) {
       gameOver = true;
       drawText('Game Over! Press "Space" to Restart', 48, "red");
       player.setIsGameRunning = false;
+      player.playAnimation("idle");
     }
   }
 
   // Player jump
-  if (input.pressedKey === "Space" && gameStarted && player.isOnFloor()) {
+  if (
+    input.pressedKey === "Space" &&
+    gameStarted &&
+    player.isOnFloor() &&
+    !player.isSliding
+  ) {
     player.jump();
     player.jumpSound.play();
   }
 
-  console.log(input.pressedKeys);
   // Player slide
   if (input.pressedKey === "KeyK" && gameStarted && player.isOnFloor()) {
-    if (player.slideClock.timer >= player.slideClock.interval) {
-      player.slideClock.timer = 0;
-    } else {
-      player.slideClock.timer += Math.round(delta * 1000);
-      player.playAnimation("slide");
-    }
+    player.isSliding = true;
+  }
+
+  if (player.isSliding && gameStarted) {
+    player.playAnimation("slide");
   }
 }
 
@@ -152,8 +163,6 @@ function draw() {
   floor.draw(ctx);
 
   player.draw(ctx);
-
-  bat.draw(ctx);
 
   if (gameStarted) {
     for (let obs of obstacles.group) {
@@ -181,6 +190,7 @@ addEventListener("keypress", (e) => {
   }
 
   if (e.code === "Space" && gameOver) {
+    player.isSliding = false;
     gameLoop.reset(resetGameState);
   }
 });

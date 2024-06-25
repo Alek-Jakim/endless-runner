@@ -1,7 +1,7 @@
 import { getRandomInt } from "../utils";
 
 export class Bat {
-  constructor(x, y = 425, imagePath) {
+  constructor(x, y = 400, imagePath) {
     this.image = new Image();
     this.image.src = imagePath;
     this.isLoaded = false;
@@ -18,7 +18,7 @@ export class Bat {
     this.frameTimer = 0;
     this.staggerRate = 5;
     this.x = x;
-    this.y = y ?? 425;
+    this.y = y ?? 400;
 
     this.width = 150;
     this.height = 150;
