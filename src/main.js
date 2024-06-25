@@ -82,7 +82,7 @@ function update(delta) {
       if (randomObstacle === 0) {
         obstacles.group.push(Rect.createRectObstacle(canvas));
       } else {
-        obstacles.group.push(new Bat(C_WIDTH + 100, 425, "bat.png"));
+        obstacles.group.push(new Bat(C_WIDTH + 100, 380, "bat.png"));
       }
 
       obstacles.spawnClock.timer = 0;
@@ -155,6 +155,7 @@ function update(delta) {
   }
 
   if (player.isSliding && gameStarted) {
+    player.slideSound.play();
     player.playAnimation("slide");
   }
 }
@@ -172,6 +173,10 @@ function draw() {
 
   if (toggleText && !gameOver) {
     drawText('Press "Enter" to Start');
+    drawText('Press "Space" to jump and "K" to slide', 28, "white", [
+      C_WIDTH / 2,
+      400,
+    ]);
   }
 
   drawText(`Score: ${score.current}`, 38, "white", [C_WIDTH - 150, 75]);

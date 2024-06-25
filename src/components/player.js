@@ -8,6 +8,7 @@ export class Player {
     this.jumpSound = new Sound("jump-grunt.mp3");
     this.gameOverSound = new Sound("game-over-grunt.mp3");
     this.runningSound = new Sound("running.mp3", true);
+    this.slideSound = new Sound("sliding.mp3");
 
     this.animations = {
       idle: {
@@ -49,7 +50,7 @@ export class Player {
 
     this.slideClock = new Clock();
     this.slideClock.timer = 0;
-    this.slideClock.interval = 1000;
+    this.slideClock.interval = 500;
     this.isSliding = false;
 
     this.image.onload = () => {
