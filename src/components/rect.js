@@ -1,5 +1,6 @@
 import { C_HEIGHT } from "../constants";
 import { getRandomInt } from "../utils";
+import { Clock } from "./clock";
 
 export class Rect {
   static colors = [
@@ -12,6 +13,25 @@ export class Rect {
     "orange",
     "cyan",
   ];
+
+  static speedOne = 1200;
+  static speedTwo = 1400;
+
+  static speedClock = new Clock();
+
+  static getRandomSpeed() {
+    return getRandomInt(Rect.speedOne, Rect.speedTwo);
+  }
+
+  static increaseSpeed() {
+    this.speedOne += 50;
+    this.speedTwo += 50;
+  }
+
+  static {
+    this.speedClock.timer = 0;
+    this.speedClock.interval = 20000;
+  }
 
   constructor(
     x = 0,
@@ -43,6 +63,10 @@ export class Rect {
 
     this.gravity = 1;
     this.velocityY = 0;
+
+    this.speedClock = new Clock();
+    this.speedClock.timer = 0;
+    this.speedClock.interval = 20000;
   }
 
   draw(ctx) {
@@ -63,7 +87,7 @@ export class Rect {
     if (!this.isObstacle) return;
 
     // TODO - increase speed as time passes
-    let randomSpeed = getRandomInt(1500, 1800);
+    let randomSpeed = Rect.getRandomSpeed();
 
     this.x -= randomSpeed * delta;
     this.strokeX -= randomSpeed * delta;

@@ -3,6 +3,7 @@ import { Player } from "./components/player";
 import { Rect } from "./components/rect";
 import { Input } from "./components/input";
 import { Score } from "./components/score";
+import { Bat } from "./components/bat";
 import { Obastacles } from "./components/obstacles";
 import { getRandomInt, isCollidingRect } from "./utils";
 import { C_WIDTH, C_HEIGHT } from "./constants";
@@ -23,6 +24,7 @@ const player = new Player("player-spritesheet.png");
 const input = new Input();
 const score = new Score();
 const obstacles = new Obastacles();
+const bat = new Bat(100, 425, "bat.png");
 
 function resetGameState() {
   gameStarted = false;
@@ -64,6 +66,8 @@ function drawText(
 function update(delta) {
   player.update(delta, gameStarted);
 
+  bat.update(delta, gameStarted);
+
   // Update score
   if (gameStarted && !gameOver) {
     // Increase score
@@ -76,7 +80,13 @@ function update(delta) {
 
     // Spawn obstacles
     if (obstacles.spawnClock.timer >= obstacles.spawnClock.interval) {
-      obstacles.group.push(Rect.createRectObstacle(canvas));
+      const randomObstacle = getRandomInt(0, 1);
+
+      if (randomObstacle === 0) {
+        obstacles.group.push(Rect.createRectObstacle(canvas));
+      } else {
+        obstacles.group.push(new Bat(C_WIDTH + 100, 425, "bat.png"));
+      }
       obstacles.spawnClock.timer = 0;
       obstacles.spawnClock.interval = getRandomInt(
         obstacles.intOne,
@@ -86,11 +96,20 @@ function update(delta) {
       obstacles.spawnClock.timer += Math.round(delta * 1000);
     }
 
+    // Reduce the spawn intervals
     if (obstacles.intervalClock.timer >= obstacles.intervalClock.interval) {
       obstacles.intervalClock.timer = 0;
       obstacles.reduceIntervals();
     } else {
       obstacles.intervalClock.timer += Math.round(delta * 1000);
+    }
+
+    // Make obstacles faster
+    if (Rect.speedClock.timer >= Rect.speedClock.interval) {
+      Rect.speedClock.timer = 0;
+      Rect.increaseSpeed();
+    } else {
+      Rect.speedClock.timer += Math.round(delta * 1000);
     }
   }
 
@@ -122,6 +141,8 @@ function draw() {
   floor.draw(ctx);
 
   player.draw(ctx);
+
+  bat.draw(ctx);
 
   if (gameStarted) {
     for (let obs of obstacles.group) {
