@@ -1,5 +1,6 @@
 import { Sound } from "./sound";
 import { C_HEIGHT } from "../constants";
+import { Clock } from "./clock";
 export class Player {
   constructor(imagePath, x = 100, y) {
     this.isGameRunning = false;
@@ -21,6 +22,10 @@ export class Player {
         startFrameX: 18,
         endFrameX: 19,
       },
+      slide: {
+        startFrameX: 21,
+        endFrameX: 28,
+      },
     };
     this.currentAnimation = "idle";
 
@@ -41,6 +46,10 @@ export class Player {
     this.velocityY = 0;
     this.endFrameX = 10;
     this.frameX = 0;
+
+    this.slideClock = new Clock();
+    this.slideClock.timer = 0;
+    this.slideClock.interval = 1500;
 
     this.image.onload = () => {
       this.isLoaded = true;

@@ -1,9 +1,23 @@
 export class Input {
+  static allowedKeys = ["Space", "KeyK"];
+
   constructor() {
     this.pressedKeys = [];
 
     addEventListener("keypress", (e) => {
-      if (e.code === "Space" && this.pressedKeys.indexOf(e.code) === -1) {
+      if (
+        Input.allowedKeys.includes(e.code) &&
+        this.pressedKeys.indexOf(e.code) === -1
+      ) {
+        this.pressedKeys.unshift(e.code);
+      }
+    });
+
+    addEventListener("keydown", (e) => {
+      if (
+        Input.allowedKeys.includes(e.code) &&
+        this.pressedKeys.indexOf(e.code) === -1
+      ) {
         this.pressedKeys.unshift(e.code);
       }
     });

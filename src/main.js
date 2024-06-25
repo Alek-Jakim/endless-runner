@@ -130,10 +130,21 @@ function update(delta) {
     }
   }
 
-  // Player animations
+  // Player jump
   if (input.pressedKey === "Space" && gameStarted && player.isOnFloor()) {
     player.jump();
     player.jumpSound.play();
+  }
+
+  console.log(input.pressedKeys);
+  // Player slide
+  if (input.pressedKey === "KeyK" && gameStarted && player.isOnFloor()) {
+    if (player.slideClock.timer >= player.slideClock.interval) {
+      player.slideClock.timer = 0;
+    } else {
+      player.slideClock.timer += Math.round(delta * 1000);
+      player.playAnimation("slide");
+    }
   }
 }
 
