@@ -1,15 +1,15 @@
 import { Clock } from "./clock";
+import { getRandomInt } from "../utils";
 
-export class Obastacles extends Clock {
+export class Obastacles {
+  intOne = 1000;
+  intTwo = 2000;
+
   constructor() {
-    super();
+    this.spawnClock = new Clock();
+    this.intervalClock = new Clock();
+
     this.default();
-
-    this.intOne = 1000;
-    this.intTwo = 2000;
-
-    this.spawnTimer = 0;
-    this.spawnInterval = 10000;
   }
 
   reduceIntervals() {
@@ -23,7 +23,13 @@ export class Obastacles extends Clock {
 
   default() {
     this.group = [];
-    this.timer = 0;
-    this.interval = 1000;
+    this.spawnClock.timer = 0;
+    this.spawnClock.interval = getRandomInt(this.intOne, this.intTwo);
+
+    this.intervalClock.timer = 0;
+    this.intervalClock.interval = 10000;
+
+    this.intOne = 1000;
+    this.intTwo = 2000;
   }
 }

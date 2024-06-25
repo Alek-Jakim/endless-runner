@@ -67,27 +67,30 @@ function update(delta) {
   // Update score
   if (gameStarted && !gameOver) {
     // Increase score
-    if (score.timer > score.interval) {
+    if (score.scoreClock.timer > score.scoreClock.interval) {
       score.current += 1;
-      score.timer = 0;
+      score.scoreClock.timer = 0;
     } else {
-      score.timer += delta * 1000;
+      score.scoreClock.timer += delta * 1000;
     }
 
     // Spawn obstacles
-    if (obstacles.timer >= obstacles.interval) {
+    if (obstacles.spawnClock.timer >= obstacles.spawnClock.interval) {
       obstacles.group.push(Rect.createRectObstacle(canvas));
-      obstacles.timer = 0;
-      obstacles.interval = getRandomInt(obstacles.intOne, obstacles.intTwo);
+      obstacles.spawnClock.timer = 0;
+      obstacles.spawnClock.interval = getRandomInt(
+        obstacles.intOne,
+        obstacles.intTwo
+      );
     } else {
-      obstacles.timer += Math.round(delta * 1000);
+      obstacles.spawnClock.timer += Math.round(delta * 1000);
     }
 
-    if (obstacles.spawnTimer >= obstacles.spawnInterval) {
-      obstacles.spawnTimer = 0;
+    if (obstacles.intervalClock.timer >= obstacles.intervalClock.interval) {
+      obstacles.intervalClock.timer = 0;
       obstacles.reduceIntervals();
     } else {
-      obstacles.spawnTimer += Math.round(delta * 1000);
+      obstacles.intervalClock.timer += Math.round(delta * 1000);
     }
   }
 

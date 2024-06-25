@@ -1,8 +1,9 @@
 import { Clock } from "./clock";
 
-export class Score extends Clock {
+export class Score {
   constructor() {
-    super();
+    this.scoreClock = new Clock();
+
     this.default();
   }
 
@@ -16,7 +17,7 @@ export class Score extends Clock {
 
   default() {
     this.current = 0;
-    this.timer = 0;
-    this.interval = 1000;
+    this.scoreClock.timer = 0;
+    this.scoreClock.interval = 1000;
   }
 }

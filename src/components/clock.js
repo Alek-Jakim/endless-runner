@@ -1,7 +1,9 @@
 export class Clock {
-  constructor(timer = 0, interval = 1000) {
-    this._timer = timer;
-    this._interval = interval;
+  _timer;
+  _interval;
+  constructor(timer, interval) {
+    this.timer = timer;
+    this.interval = interval;
   }
 
   get timer() {
