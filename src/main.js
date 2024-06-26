@@ -31,7 +31,7 @@ const player = new Player(
   { width: 192, height: 192 },
   playerAnimations,
   "idle",
-  "player-spritesheet.png",
+  "./images/player-spritesheet.png",
   2.5
 );
 const input = new Input();
@@ -102,7 +102,7 @@ function update(delta) {
             { width: 150, height: 150 },
             batAnimations,
             "fly",
-            "bat.png"
+            "./images/bat.png"
           )
         );
       }

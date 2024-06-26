@@ -23,10 +23,10 @@ export class Player extends Entity {
       staggerRate
     );
 
-    this.jumpSound = new Sound("jump-grunt.mp3");
-    this.gameOverSound = new Sound("game-over-grunt.mp3");
-    this.runningSound = new Sound("running.mp3", true);
-    this.slideSound = new Sound("sliding.mp3");
+    this.jumpSound = new Sound("./sounds/jump-grunt.mp3");
+    this.gameOverSound = new Sound("./sounds/game-over-grunt.mp3");
+    this.runningSound = new Sound("./sounds/running.mp3", true);
+    this.slideSound = new Sound("./sounds/sliding.mp3");
 
     this.gravity = 1;
     this.velocityY = 0;
