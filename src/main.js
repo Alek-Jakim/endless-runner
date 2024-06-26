@@ -6,7 +6,12 @@ import { Score } from "./components/score";
 import { Bat } from "./components/bat";
 import { Obastacles } from "./components/obstacles";
 import { getRandomInt, isCollidingRect } from "./utils";
-import { C_WIDTH, C_HEIGHT } from "./constants";
+import {
+  C_WIDTH,
+  C_HEIGHT,
+  playerAnimations,
+  batAnimations,
+} from "./constants";
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
@@ -20,7 +25,15 @@ let gameStarted = false;
 let gameOver = false;
 let toggleText = true;
 
-const player = new Player("player-spritesheet.png");
+const player = new Player(
+  100,
+  C_HEIGHT - 192 - 70,
+  { width: 192, height: 192 },
+  playerAnimations,
+  "idle",
+  "player-spritesheet.png",
+  2.5
+);
 const input = new Input();
 const score = new Score();
 const obstacles = new Obastacles();
@@ -82,7 +95,16 @@ function update(delta) {
       if (randomObstacle === 0) {
         obstacles.group.push(Rect.createRectObstacle(canvas));
       } else {
-        obstacles.group.push(new Bat(C_WIDTH + 100, 380, "bat.png"));
+        obstacles.group.push(
+          new Bat(
+            C_WIDTH + 100,
+            380,
+            { width: 150, height: 150 },
+            batAnimations,
+            "fly",
+            "bat.png"
+          )
+        );
       }
 
       obstacles.spawnClock.timer = 0;
@@ -133,7 +155,7 @@ function update(delta) {
       player.runningSound.stop();
       gameOver = true;
       drawText('Game Over! Press "Space" to Restart', 48, "red");
-      player.setIsGameRunning = false;
+      player.isGameRunning = false;
       player.playAnimation("idle");
     }
   }

@@ -1,85 +1,44 @@
 import { Sound } from "./sound";
 import { C_HEIGHT } from "../constants";
 import { Clock } from "./clock";
-export class Player {
-  constructor(imagePath, x = 100, y) {
-    this.isGameRunning = false;
+import { Entity } from "./entity";
+
+export class Player extends Entity {
+  constructor(
+    x,
+    y,
+    spriteSize,
+    animations,
+    currentAnimation,
+    imagePath,
+    staggerRate
+  ) {
+    super(
+      x,
+      y,
+      spriteSize,
+      animations,
+      currentAnimation,
+      imagePath,
+      staggerRate
+    );
 
     this.jumpSound = new Sound("jump-grunt.mp3");
     this.gameOverSound = new Sound("game-over-grunt.mp3");
     this.runningSound = new Sound("running.mp3", true);
     this.slideSound = new Sound("sliding.mp3");
 
-    this.animations = {
-      idle: {
-        startFrameX: 0,
-        endFrameX: 10,
-      },
-      run: {
-        startFrameX: 10,
-        endFrameX: 18,
-      },
-      jump: {
-        startFrameX: 18,
-        endFrameX: 19,
-      },
-      slide: {
-        startFrameX: 21,
-        endFrameX: 28,
-      },
-    };
-    this.currentAnimation = "idle";
-
-    this.image = new Image();
-    this.image.src = imagePath;
-    this.isLoaded = false;
-
-    this.currentFrameX = this.animations[this.currentAnimation].startFrameX;
-    this.frameTimer = 0;
-    this.staggerRate = 2.5;
-    this.width = 192;
-    this.height = 192;
-    this.x = x;
-    this.y = y ?? C_HEIGHT - this.height - 70;
-
-    this.speed = 30;
     this.gravity = 1;
     this.velocityY = 0;
-    this.endFrameX = 10;
-    this.frameX = 0;
 
     this.slideClock = new Clock();
     this.slideClock.timer = 0;
     this.slideClock.interval = 500;
     this.isSliding = false;
-
-    this.image.onload = () => {
-      this.isLoaded = true;
-    };
-  }
-
-  set setIsGameRunning(value) {
-    this.isGameRunning = value;
-  }
-
-  draw(ctx) {
-    if (!this.isLoaded) return;
-
-    ctx.drawImage(
-      this.image,
-      this.currentFrameX * this.width,
-      0,
-      this.width,
-      this.height,
-      this.x,
-      this.y,
-      this.width,
-      this.height
-    );
   }
 
   update(delta, gameRunning) {
-    if (gameRunning && !this.isGameRunning) {
+    if (gameRunning) {
       this.isGameRunning = true;
     }
 
@@ -105,8 +64,8 @@ export class Player {
     } else {
       this.velocityY = 0;
     }
-    if (this.y > C_HEIGHT - this.height - 46) {
-      this.y = C_HEIGHT - this.height - 46;
+    if (this.y > C_HEIGHT - this.spriteSize.height - 46) {
+      this.y = C_HEIGHT - this.spriteSize.height - 46;
     }
 
     if (this.isOnFloor() && this.isGameRunning) {
@@ -123,7 +82,7 @@ export class Player {
   }
 
   isOnFloor() {
-    return this.y >= C_HEIGHT - this.height - 46;
+    return this.y >= C_HEIGHT - this.spriteSize.height - 46;
   }
 
   jump() {

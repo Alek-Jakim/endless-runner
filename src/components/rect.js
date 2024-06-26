@@ -28,6 +28,26 @@ export class Rect {
     this.speedTwo += 50;
   }
 
+  static createRectObstacle(canvas) {
+    const randomHeight = getRandomInt(75, 100);
+    const randomColor = Rect.colors[getRandomInt(0, Rect.colors.length - 1)];
+
+    return new Rect(
+      canvas.width + 300,
+      canvas.height - 178,
+      50,
+      randomHeight,
+      randomColor,
+      canvas.width + 300,
+      canvas.height - 178,
+      50,
+      randomHeight,
+      Rect.colors["white"],
+      2,
+      true
+    );
+  }
+
   static {
     this.speedClock.timer = 0;
     this.speedClock.interval = 20000;
@@ -86,7 +106,6 @@ export class Rect {
   update(delta) {
     if (!this.isObstacle) return;
 
-    // TODO - increase speed as time passes
     let randomSpeed = Rect.getRandomSpeed();
 
     this.x -= randomSpeed * delta;
@@ -107,25 +126,5 @@ export class Rect {
 
   isOnFloor() {
     return this.y >= C_HEIGHT - this.height - 80;
-  }
-
-  static createRectObstacle(canvas) {
-    const randomHeight = getRandomInt(75, 100);
-    const randomColor = Rect.colors[getRandomInt(0, Rect.colors.length - 1)];
-
-    return new Rect(
-      canvas.width + 300,
-      canvas.height - 178,
-      50,
-      randomHeight,
-      randomColor,
-      canvas.width + 300,
-      canvas.height - 178,
-      50,
-      randomHeight,
-      Rect.colors["white"],
-      2,
-      true
-    );
   }
 }

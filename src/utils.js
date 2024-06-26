@@ -9,18 +9,18 @@ export function isCollidingRect(player, rect) {
   if (rect instanceof Rect) {
     return !(
       player.x > rect.x + rect.width - 30 ||
-      player.x + player.width / 2 + 40 < rect.x ||
+      player.x + player.spriteSize.width / 2 + 40 < rect.x ||
       player.y > rect.y + rect.height ||
-      player.y + player.height / 2 + 70 < rect.y
+      player.y + player.spriteSize.height / 2 + 70 < rect.y
     );
   }
 
   if (rect instanceof Bat && !player.isSliding) {
     return !(
       player.x > rect.x + rect.width - 20 ||
-      player.x + player.width / 2 - 20 < rect.x ||
+      player.x + player.spriteSize.width / 2 - 20 < rect.x ||
       player.y > rect.y + rect.height ||
-      player.y + player.height / 2 + 20 < rect.y
+      player.y + player.spriteSize.height / 2 + 20 < rect.y
     );
   }
 }
